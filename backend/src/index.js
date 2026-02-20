@@ -10,13 +10,21 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const defaultOrigins = ["http://localhost:3000", "http://127.0.0.1:3000"];
-const configuredOrigins = (process.env.CORS_ORIGIN || "")
-  .split(",")
+const defaultOrigins = [
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "https://not-tradesforce.onrender.com",
+  "https://tradesforce-component-1.onrender.com",
+];
+const configuredOrigins = [process.env.CORS_ORIGIN, process.env.FRONTEND_URL]
+  .filter(Boolean)
+  .flatMap((originList) => originList.split(","))
   .map((origin) => origin.trim())
   .filter(Boolean);
 const allowedOrigins =
-  configuredOrigins.length > 0 ? configuredOrigins : defaultOrigins;
+  configuredOrigins.length > 0
+    ? [...new Set(configuredOrigins)]
+    : defaultOrigins;
 
 app.disable("x-powered-by");
 
