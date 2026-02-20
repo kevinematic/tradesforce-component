@@ -21,10 +21,7 @@ const configuredOrigins = [process.env.CORS_ORIGIN, process.env.FRONTEND_URL]
   .flatMap((originList) => originList.split(","))
   .map((origin) => origin.trim())
   .filter(Boolean);
-const allowedOrigins =
-  configuredOrigins.length > 0
-    ? [...new Set(configuredOrigins)]
-    : defaultOrigins;
+const allowedOrigins = [...new Set([...defaultOrigins, ...configuredOrigins])];
 
 app.disable("x-powered-by");
 
