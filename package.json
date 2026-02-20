@@ -13,7 +13,9 @@
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "build:frontend": "cd frontend && npm run build",
-    "start:backend": "cd backend && npm start"
+    "start:backend": "cd backend && npm start",
+    "format": "prettier --write \"backend/src/**/*.{js,mjs,cjs,json}\" \"frontend/**/*.{js,jsx,css,html,json}\" \"package.json\"",
+    "format:check": "prettier --check \"backend/src/**/*.{js,mjs,cjs,json}\" \"frontend/**/*.{js,jsx,css,html,json}\" \"package.json\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

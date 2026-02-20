@@ -72,30 +72,6 @@ export class AdzunaClient {
       throw error;
     }
   }
-
-  /**
-   * Get available job categories
-   * @returns {Promise<Object>} Categories list
-   */
-  async getCategories() {
-    const url = `${ADZUNA_BASE_URL}/${COUNTRY}/categories`;
-
-    try {
-      const response = await axios.get(url, {
-        params: {
-          app_id: this.appId,
-          app_key: this.appKey,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error(
-        "Adzuna Categories Error:",
-        error.response?.data || error.message,
-      );
-      throw error;
-    }
-  }
 }
 
 export default new AdzunaClient();

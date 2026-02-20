@@ -69,11 +69,3 @@ export function inferTrade(title) {
 
   return "General Trade";
 }
-
-/**
- * Get all available trade types
- * @returns {string[]} List of trade types
- */
-export function getTradeTypes() {
-  return Object.keys(TRADE_KEYWORDS);
-}

@@ -20,8 +20,11 @@ const TRADE_QUERIES = [
   { what: "heavy equipment operator" },
 ];
 
-const RESULTS_PER_PAGE = parseInt(process.env.RESULTS_PER_PAGE || "20");
-const MAX_DAYS_OLD = parseInt(process.env.MAX_DAYS_OLD || "30");
+const RESULTS_PER_PAGE = Number.parseInt(
+  process.env.RESULTS_PER_PAGE || "20",
+  10,
+);
+const MAX_DAYS_OLD = Number.parseInt(process.env.MAX_DAYS_OLD || "30", 10);
 
 /**
  * Upsert a job listing into the database

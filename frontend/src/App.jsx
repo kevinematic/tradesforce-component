@@ -1,4 +1,3 @@
-import React from "react";
 import JobFeed from "./components/JobFeed";
 import "./App.css";
 

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   formatPostedDate,
   formatSalary,
@@ -102,6 +102,8 @@ const JobCard = ({ job }) => {
             href={safeRedirectUrl || "#"}
             onClick={handleExternalClick}
             title="View original listing"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <svg
               viewBox="0 0 24 24"
@@ -134,9 +136,7 @@ const JobCard = ({ job }) => {
             <span className="info-label">Company</span>
             <span className="info-value">
               {company_name || (
-                <em style={{ color: "var(--slate-400)" }}>
-                  Company not listed
-                </em>
+                <em className="text-fallback">Company not listed</em>
               )}
             </span>
           </div>
@@ -164,7 +164,7 @@ const JobCard = ({ job }) => {
             <span className="info-label">Contract</span>
             <span className="info-value">
               {formatContractInfo(contract_type, contract_time) || (
-                <em style={{ color: "var(--slate-400)" }}>Not specified</em>
+                <em className="text-fallback">Not specified</em>
               )}
             </span>
           </div>
@@ -208,6 +208,8 @@ const JobCard = ({ job }) => {
             href={safeRedirectUrl || "#"}
             className="btn-view"
             onClick={handleExternalClick}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             View Listing
             <svg

@@ -67,7 +67,6 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -100%);
   width: 28px;
   height: 28px;
   background: var(--amber-500);
@@ -279,4 +278,8 @@
 .btn-view svg {
   width: 13px;
   height: 13px;
+}
+
+.text-fallback {
+  color: var(--slate-400);
 }

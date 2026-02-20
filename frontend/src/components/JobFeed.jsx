@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import JobCard from "./JobCard";
 import { fetchRandomJob } from "../services/api";
 import "./JobFeed.css";
@@ -8,11 +8,7 @@ const JobFeed = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    loadRandomJob();
-  }, []);
-
-  const loadRandomJob = async () => {
+  const loadRandomJob = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -26,7 +22,11 @@ const JobFeed = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadRandomJob();
+  }, [loadRandomJob]);
 
   return (
     <div className="job-feed">

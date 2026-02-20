@@ -120,7 +120,3 @@ export function initDatabase() {
 
   console.log("✅ Database initialized successfully");
 }
-
-export function closeDatabase() {
-  db.close();
-}
