@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trades Force - Job Card Redesign</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --amber-50: #fffbeb;
+        --amber-100: #fef3c7;
+        --amber-200: #fde68a;
+        --amber-400: #fbbf24;
+        --amber-500: #f59e0b;
+        --amber-600: #d97706;
+        --slate-50: #f8fafc;
+        --slate-100: #f1f5f9;
+        --slate-200: #e2e8f0;
+        --slate-300: #cbd5e1;
+        --slate-400: #94a3b8;
+        --slate-500: #64748b;
+        --slate-600: #475569;
+        --slate-700: #334155;
+        --slate-800: #1e293b;
+        --slate-900: #0f172a;
+        --radius: 14px;
+        --radius-sm: 8px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: #f0ebe3;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 40px 20px;
+        gap: 40px;
+      }
+
+      .column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .column-label {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--slate-400);
+        margin-bottom: 8px;
+      }
+
+      /* ===== CARD STYLES ===== */
+      .job-card {
+        width: 370px;
+        background: #fff;
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow:
+          0 1px 3px rgba(0, 0, 0, 0.04),
+          0 6px 24px rgba(0, 0, 0, 0.06);
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
+      }
+
+      .job-card:hover {
+        transform: translateY(-2px);
+        box-shadow:
+          0 2px 6px rgba(0, 0, 0, 0.05),
+          0 12px 32px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Map area */
+      .card-map {
+        position: relative;
+        height: 180px;
+        background: linear-gradient(
+          135deg,
+          var(--slate-100) 0%,
+          var(--slate-200) 100%
+        );
+        overflow: hidden;
+      }
+
+      .card-map .map-placeholder {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.7;
+      }
+
+      .map-pin {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -100%);
+        width: 28px;
+        height: 28px;
+        background: var(--amber-500);
+        border: 3px solid #fff;
+        border-radius: 50% 50% 50% 0;
+        transform: translate(-50%, -100%) rotate(-45deg);
+        box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+      }
+
+      .map-pin::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 8px;
+        height: 8px;
+        background: #fff;
+        border-radius: 50%;
+      }
+
+      /* External badge */
+      .badge-external {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: var(--amber-400);
+        color: var(--slate-800);
+        font-size: 12px;
+        font-weight: 600;
+        padding: 5px 12px;
+        border-radius: 20px;
+        box-shadow: 0 2px 6px rgba(251, 191, 36, 0.4);
+        text-decoration: none;
+        transition: background 0.15s ease;
+        cursor: pointer;
+      }
+
+      .badge-external:hover {
+        background: var(--amber-500);
+      }
+
+      .badge-external svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      /* Source pill */
+      .badge-source {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(6px);
+        color: var(--slate-500);
+        font-size: 11px;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: 20px;
+      }
+
+      /* Card body */
+      .card-body {
+        padding: 20px;
+      }
+
+      /* Location block */
+      .card-location {
+        margin-bottom: 18px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--slate-100);
+      }
+
+      .card-location h3 {
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--slate-800);
+        margin-bottom: 3px;
+      }
+
+      .card-location p {
+        font-size: 13px;
+        color: var(--slate-400);
+      }
+
+      /* Info grid */
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 20px;
+        margin-bottom: 18px;
+      }
+
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .info-label {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: var(--amber-600);
+        font-weight: 700;
+      }
+
+      .info-value {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--slate-700);
+      }
+
+      .info-value.estimated {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .estimated-dot {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--amber-100);
+        color: var(--amber-600);
+        font-size: 9px;
+        font-weight: 700;
+        cursor: help;
+      }
+
+      /* Tags row */
+      .tags-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+
+      .tag {
+        font-size: 12px;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: 6px;
+        background: var(--slate-50);
+        color: var(--slate-600);
+        border: 1px solid var(--slate-200);
+      }
+
+      .tag.category {
+        background: var(--amber-50);
+        color: var(--amber-600);
+        border-color: var(--amber-200);
+      }
+
+      /* Description */
+      .card-description {
+        margin-bottom: 18px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--slate-100);
+      }
+
+      .card-description .info-label {
+        margin-bottom: 6px;
+      }
+
+      .card-description p {
+        font-size: 13.5px;
+        line-height: 1.55;
+        color: var(--slate-500);
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      /* Footer */
+      .card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .posted-date {
+        font-size: 12px;
+        color: var(--slate-400);
+      }
+
+      .posted-date span {
+        color: var(--slate-600);
+        font-weight: 500;
+      }
+
+      .btn-view {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--slate-800);
+        color: #fff;
+        font-family: "DM Sans", sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 9px 18px;
+        border-radius: var(--radius-sm);
+        border: none;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        text-decoration: none;
+      }
+
+      .btn-view:hover {
+        background: var(--slate-700);
+      }
+
+      .btn-view svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      /* ===== FIELD MAPPING ANNOTATION ===== */
+      .mapping-card {
+        width: 370px;
+        background: #fff;
+        border-radius: var(--radius);
+        padding: 24px;
+        box-shadow:
+          0 1px 3px rgba(0, 0, 0, 0.04),
+          0 6px 24px rgba(0, 0, 0, 0.06);
+      }
+
+      .mapping-card h4 {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--amber-600);
+        margin-bottom: 14px;
+      }
+
+      .mapping-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--slate-100);
+      }
+
+      .mapping-row:last-child {
+        border-bottom: none;
+      }
+
+      .map-field {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--slate-800);
+        background: var(--slate-50);
+        padding: 3px 8px;
+        border-radius: 4px;
+        border: 1px solid var(--slate-200);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .map-arrow {
+        color: var(--slate-300);
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      .map-desc {
+        font-size: 12px;
+        color: var(--slate-500);
+        line-height: 1.4;
+      }
+
+      .map-desc strong {
+        color: var(--slate-700);
+      }
+
+      .badge-direct {
+        display: inline-block;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        padding: 2px 6px;
+        border-radius: 3px;
+        background: #dcfce7;
+        color: #16a34a;
+      }
+
+      .badge-derived {
+        display: inline-block;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        padding: 2px 6px;
+        border-radius: 3px;
+        background: var(--amber-100);
+        color: var(--amber-600);
+      }
+
+      @media (max-width: 820px) {
+        body {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- REDESIGNED CARD -->
+    <div class="column">
+      <div class="column-label">Redesigned Component</div>
+      <div class="job-card">
+        <!-- Map -->
+        <div class="card-map">
+          <img
+            class="map-placeholder"
+            src="https://api.mapbox.com/styles/v1/mapbox/light-v11/static/-73.9857,40.7484,14,0/370x180@2x?access_token=pk.placeholder"
+            alt="Map"
+            onerror="this.style.display = 'none'"
+          />
+          <div class="map-pin"></div>
+          <a class="badge-external" href="#" title="View original listing">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+              />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            External
+          </a>
+          <div class="badge-source">via Adzuna</div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+          <!-- Location -->
+          <div class="card-location">
+            <h3>Commercial Locksmith — Office Rekey</h3>
+            <p>Midtown Manhattan, New York, NY</p>
+          </div>
+
+          <!-- Info grid -->
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Company</span>
+              <span class="info-value">Atlas Property Group</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Category</span>
+              <span class="info-value">Trade &amp; Construction</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Salary Range</span>
+              <span class="info-value estimated">
+                $52k – $68k
+                <span
+                  class="estimated-dot"
+                  title="Salary is estimated by Adzuna"
+                  >~</span
+                >
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Contract</span>
+              <span class="info-value">Contract · Full-time</span>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="tags-row">
+            <span class="tag category">Trade &amp; Construction</span>
+            <span class="tag">Full-time</span>
+            <span class="tag">Contract</span>
+          </div>
+
+          <!-- Description snippet -->
+          <div class="card-description">
+            <span class="info-label">Description</span>
+            <p>
+              We need 200+ doors rekeyed for a major remodel in our office.
+              Looking for an experienced locksmith with commercial experience to
+              handle high-security lock systems…
+            </p>
+          </div>
+
+          <!-- Footer -->
+          <div class="card-footer">
+            <span class="posted-date">Posted <span>Feb 18, 2026</span></span>
+            <a href="#" class="btn-view">
+              View Listing
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FIELD MAPPING REFERENCE -->
+    <div class="column">
+      <div class="column-label">Adzuna API → Component</div>
+      <div class="mapping-card">
+        <h4>Field Mapping</h4>
+
+        <div class="mapping-row">
+          <span class="map-field">title</span>
+          <span class="map-arrow">→</span>
+          <span class="map-desc"
+            ><strong>Card heading</strong>
+            <span class="badge-direct">direct</span></span
+          >
+        </div>
+
+        <div class="mapping-row">
+          <span class="map-field">location.*</span>
+          <span class="map-arrow">→</span>
+          <span class="map-desc"
+            ><strong>Address + Map pin</strong> via <code>latitude</code>,
+            <code>longitude</code>, <code>display_name</code>,
+            <code>area[]</code> <span class="badge-direct">direct</span></span
+          >
+        </div>
+
+        <div class="mapping-row">
+          <span class="map-field">company</span>
+          <span class="map-arrow">→</span>
+          <span class="map-desc"
+            ><strong>Company name</strong> from <code>display_name</code>
+            <span class="badge-direct">direct</span></span
+          >
+        </div>
+
+        <div class="mapping-row">
+          <span class="map-field">category</span>
+          <span class="map-arrow">→</span>
+          <span class="map-desc"
+            ><strong>Category tag</strong> from <code>label</code> (e.g. "Trade
+            &amp; Construction Jobs")
+            <span class="badge-direct">direct</span></span
+          >
+        </div>
+
+        <div class="mapping-row">
+          <span class="map-field">salary_min/max</span>
+          <span class="map-arrow">→</span>
+          <span class="map-desc"
+            ><strong>Salary range</strong> — show ~ when
+            <code>salary_is_predicted</code> = true. Use <code>/us/</code> in
+            API path for USD <span class="badge-direct">direct</span></span
+          >
+        </div>
+
+        <div class="mapping-row">
+          <span class="map-field">contract_time</span>
+          <span class="map-arrow">→</span>
+          <span class="map-desc"
+            ><strong>Full-time / Part-time</strong> tag
+            <span class="badge-direct">direct</span></span
+          >
+        </div>
+
+        <div class="mapping-row">
+          <span class="map-field">contract_type</span>
+          <span class="map-arrow">→</span>
+          <span class="map-desc"
+            ><strong>Permanent / Contract</strong> tag
+            <span class="badge-direct">direct</span></span
+          >
+        </div>
+
+        <div class="mapping-row">
+          <span class="map-field">description</span>
+          <span class="map-arrow">→</span>
+          <span class="map-desc"
+            ><strong>Description snippet</strong> — clamped to 3 lines
+            <span class="badge-direct">direct</span></span
+          >
+        </div>
+
+        <div class="mapping-row">
+          <span class="map-field">created</span>
+          <span class="map-arrow">→</span>
+          <span class="map-desc"
+            ><strong>Posted date</strong> in footer
+            <span class="badge-direct">direct</span></span
+          >
+        </div>
+
+        <div class="mapping-row">
+          <span class="map-field">redirect_url</span>
+          <span class="map-arrow">→</span>
+          <span class="map-desc"
+            ><strong>External badge</strong> +
+            <strong>View Listing</strong> button
+            <span class="badge-direct">direct</span></span
+          >
+        </div>
+
+        <div class="mapping-row">
+          <span class="map-field">title</span>
+          <span class="map-arrow">→</span>
+          <span class="map-desc"
+            ><strong>Trade type</strong> — parse keywords from title to infer
+            trade <span class="badge-derived">derived</span></span
+          >
+        </div>
+      </div>
+
+      <div class="mapping-card" style="margin-top: 4px">
+        <h4>Removed Fields</h4>
+
+        <div class="mapping-row">
+          <span class="map-desc"
+            >🚫 <strong>Date Needed</strong> — not available from Adzuna</span
+          >
+        </div>
+        <div class="mapping-row">
+          <span class="map-desc"
+            >🚫 <strong># Openings</strong> — not available from Adzuna</span
+          >
+        </div>
+        <div class="mapping-row">
+          <span class="map-desc"
+            >🚫 <strong>Flat Rate</strong> — replaced with salary range</span
+          >
+        </div>
+        <div class="mapping-row">
+          <span class="map-desc" style="border-bottom: none"
+            >🚫 <strong>Job Type</strong> (Freelance) — replaced with
+            contract_type + contract_time</span
+          >
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

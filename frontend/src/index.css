@@ -1,0 +1,60 @@
+:root {
+  --amber-50: #fef4eb;
+  --amber-100: #ffe8d1;
+  --amber-200: #ffd1a3;
+  --amber-400: #f59a4b;
+  --amber-500: #f2780c;
+  --amber-600: #d97757;
+  --slate-50: #faf9f5;
+  --slate-100: #f5f4f1;
+  --slate-200: #e5e7eb;
+  --slate-300: #d1d5db;
+  --slate-400: #919191;
+  --slate-500: #484748;
+  --slate-600: #353435;
+  --slate-700: #33373d;
+  --slate-800: #1f1e1d;
+  --slate-900: #141413;
+
+  --brand-primary: #2563eb;
+  --brand-accent: #f2780c;
+  --brand-navy: #14387c;
+  --brand-text: #141413;
+  --brand-text-strong: #1f1e1d;
+  --brand-text-body: #33373d;
+  --brand-text-muted: #484748;
+  --brand-text-subtle: #919191;
+  --brand-bg: #faf9f5;
+  --brand-surface: #ffffff;
+  --brand-border: #e5e7eb;
+  --stroke-orange: #fef4eb;
+  --stroke-blue: #eef3fe;
+  --stroke-yellow: #fdf9e5;
+  --stroke-green: #e6fee1;
+  --icon-yellow: #e5c705;
+  --icon-green-1: #89ea72;
+  --icon-green-2: #93df82;
+  --icon-magenta: #cc3366;
+
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "DM Sans", sans-serif;
+  background: var(--brand-bg);
+  color: var(--brand-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
