@@ -1,0 +1,107 @@
+.job-search-form {
+  margin-bottom: 24px;
+}
+
+.search-fields {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-group label {
+  font-family: "Space Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--brand-accent);
+  font-weight: 700;
+}
+
+.field-address {
+  flex: 1;
+}
+
+.field-group input,
+.field-group select {
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--brand-border);
+  border-radius: var(--radius-sm);
+  background: var(--brand-surface);
+  color: var(--brand-text-body);
+  transition: border-color 0.15s ease;
+}
+
+.field-group input:focus,
+.field-group select:focus {
+  outline: none;
+  border-color: var(--brand-primary);
+}
+
+.field-group input::placeholder {
+  color: var(--brand-text-subtle);
+}
+
+.field-group input:disabled,
+.field-group select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.field-radius select {
+  min-width: 110px;
+}
+
+.search-btn {
+  padding: 10px 24px;
+  background: var(--brand-primary);
+  color: #fff;
+  border: 1px solid var(--brand-primary);
+  border-radius: var(--radius-sm);
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    opacity 0.15s ease;
+  white-space: nowrap;
+}
+
+.search-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.search-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.search-error {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #dc2626;
+}
+
+@media (max-width: 600px) {
+  .search-fields {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .field-radius select {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .search-btn {
+    width: 100%;
+  }
+}

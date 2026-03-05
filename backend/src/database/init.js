@@ -1,10 +1,10 @@
-import { supabase } from "./supabase.js";
+import { getSupabase } from "./supabase.js";
 
 const TABLE = "external_job_listings";
 
 export async function initDatabase() {
   console.log("Checking Supabase connection...");
-  const { error } = await supabase.from(TABLE).select("id").limit(1);
+  const { error } = await getSupabase().from(TABLE).select("id").limit(1);
   if (error) {
     throw new Error(`Supabase connection failed: ${error.message}`);
   }
@@ -20,7 +20,7 @@ export async function getJobs({
   page = 1,
   perPage = 20,
 }) {
-  let query = supabase
+  let query = getSupabase()
     .from(TABLE)
     .select("*", { count: "exact" })
     .eq("is_active", true);
@@ -59,7 +59,7 @@ export async function getJobs({
 export async function getRandomJob() {
   // Supabase doesn't support ORDER BY RANDOM() directly,
   // so we fetch a count and pick a random offset.
-  const { count, error: countError } = await supabase
+  const { count, error: countError } = await getSupabase()
     .from(TABLE)
     .select("*", { count: "exact", head: true })
     .eq("is_active", true)
@@ -71,7 +71,7 @@ export async function getRandomJob() {
 
   const randomOffset = Math.floor(Math.random() * count);
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from(TABLE)
     .select("*")
     .eq("is_active", true)
@@ -85,7 +85,7 @@ export async function getRandomJob() {
 }
 
 export async function getJobById(id) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from(TABLE)
     .select("*")
     .eq("id", id)
@@ -97,7 +97,7 @@ export async function getJobById(id) {
 }
 
 export async function getStatsSummary() {
-  const { data: stats, error: statsError } = await supabase
+  const { data: stats, error: statsError } = await getSupabase()
     .from(TABLE)
     .select("salary_min, salary_max")
     .eq("is_active", true);
@@ -120,7 +120,7 @@ export async function getStatsSummary() {
       ? salaryMaxes.reduce((a, b) => a + b, 0) / salaryMaxes.length
       : null;
 
-  const { data: tradeRows, error: tradeError } = await supabase.rpc(
+  const { data: tradeRows, error: tradeError } = await getSupabase().rpc(
     "get_trade_breakdown",
   );
 
@@ -132,7 +132,7 @@ export async function getStatsSummary() {
       // We don't have derived_trade in the salary query, re-fetch
     }
     // If RPC fails, do a separate query
-    const { data: tradeData } = await supabase
+    const { data: tradeData } = await getSupabase()
       .from(TABLE)
       .select("derived_trade")
       .eq("is_active", true);
@@ -163,7 +163,7 @@ export async function getStatsSummary() {
 }
 
 export async function upsertJob(job) {
-  const { error } = await supabase.from(TABLE).upsert(job, {
+  const { error } = await getSupabase().from(TABLE).upsert(job, {
     onConflict: "id",
   });
   if (error) throw error;
@@ -173,7 +173,7 @@ export async function markStaleJobsInactive() {
   const cutoffTime = new Date();
   cutoffTime.setHours(cutoffTime.getHours() - 48);
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from(TABLE)
     .update({ is_active: false })
     .lt("fetched_at", cutoffTime.toISOString())
@@ -184,8 +184,20 @@ export async function markStaleJobsInactive() {
   return data?.length || 0;
 }
 
+export async function getJobsByRadius({ lat, lng, radiusMiles, count }) {
+  const { data, error } = await getSupabase().rpc("search_jobs_by_radius", {
+    search_lat: lat,
+    search_lng: lng,
+    radius_miles: radiusMiles,
+    result_count: count,
+  });
+
+  if (error) throw error;
+  return data || [];
+}
+
 export async function checkJobExists(id) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from(TABLE)
     .select("id")
     .eq("id", id)

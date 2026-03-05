@@ -21,3 +21,25 @@ export async function fetchRandomJob() {
     );
   }
 }
+
+/**
+ * Fetch jobs near a location
+ */
+export async function fetchNearbyJobs({ lat, lng, radius = 25, count = 3 }) {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/external-jobs/nearby`, {
+      params: { lat, lng, radius, count },
+    });
+    return response.data.jobs;
+  } catch (error) {
+    console.error("API Error:", error);
+    if (error.request && !error.response) {
+      throw new Error(
+        "Cannot reach backend API. Check VITE_API_BASE_URL and ensure the backend is running.",
+      );
+    }
+    throw new Error(
+      error.response?.data?.error || "Failed to fetch nearby jobs",
+    );
+  }
+}

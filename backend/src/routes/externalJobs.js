@@ -3,6 +3,7 @@ import {
   getJobs,
   getRandomJob,
   getJobById,
+  getJobsByRadius,
   getStatsSummary,
 } from "../database/init.js";
 
@@ -108,6 +109,51 @@ router.get("/random", async (req, res) => {
     res.json(parseJob(job));
   } catch (error) {
     console.error("Error fetching random job:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+const ALLOWED_RADII = new Set([5, 10, 25, 50, 100]);
+const MAX_NEARBY_COUNT = 10;
+
+/**
+ * GET /api/external-jobs/nearby
+ * Find jobs within a radius of given coordinates
+ */
+router.get("/nearby", async (req, res) => {
+  try {
+    const lat = parseFloat(req.query.lat);
+    const lng = parseFloat(req.query.lng);
+    const radius = parseInt(req.query.radius, 10) || 25;
+    const count = Math.min(
+      parsePositiveInt(req.query.count, 3),
+      MAX_NEARBY_COUNT,
+    );
+
+    if (!Number.isFinite(lat) || lat < -90 || lat > 90) {
+      return res.status(400).json({ error: "Invalid lat (must be -90 to 90)" });
+    }
+    if (!Number.isFinite(lng) || lng < -180 || lng > 180) {
+      return res
+        .status(400)
+        .json({ error: "Invalid lng (must be -180 to 180)" });
+    }
+    if (!ALLOWED_RADII.has(radius)) {
+      return res
+        .status(400)
+        .json({ error: "Invalid radius (allowed: 5, 10, 25, 50, 100)" });
+    }
+
+    const jobs = await getJobsByRadius({
+      lat,
+      lng,
+      radiusMiles: radius,
+      count,
+    });
+
+    res.json({ jobs: jobs.map(parseJob) });
+  } catch (error) {
+    console.error("Error fetching nearby jobs:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
