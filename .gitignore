@@ -38,7 +38,9 @@ Thumbs.db
 # Database
 *.sqlite
 *.db
-data/
+
+# Netlify
+.netlify/
 
 # Testing
 coverage/
