@@ -6,7 +6,6 @@
   display: flex;
   align-items: flex-end;
   gap: 12px;
-  width: fit-content;
 }
 
 .field-group {
@@ -24,8 +23,8 @@
   font-weight: 700;
 }
 
-.field-address input {
-  width: 280px;
+.field-address {
+  flex: 1;
 }
 
 .address-wrapper {
@@ -136,11 +135,6 @@
   .search-fields {
     flex-direction: column;
     align-items: stretch;
-    width: 100%;
-  }
-
-  .field-address input {
-    width: 100%;
   }
 
   .field-radius select {
