@@ -1,4 +1,26 @@
 /**
+ * Search for address suggestions using Nominatim.
+ * Returns array of { lat, lng, displayName }.
+ */
+export async function searchAddress(query) {
+  const encoded = encodeURIComponent(query.trim());
+  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encoded}`;
+
+  const response = await fetch(url, {
+    headers: { "User-Agent": "TradesForce/1.0" },
+  });
+
+  if (!response.ok) return [];
+
+  const results = await response.json();
+  return results.map(({ lat, lon, display_name }) => ({
+    lat: parseFloat(lat),
+    lng: parseFloat(lon),
+    displayName: display_name,
+  }));
+}
+
+/**
  * Geocode an address using OpenStreetMap Nominatim (free, no API key).
  * Returns { lat, lng, displayName } or null if not found.
  */

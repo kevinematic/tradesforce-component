@@ -27,6 +27,42 @@
   flex: 1;
 }
 
+.address-wrapper {
+  position: relative;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  background: var(--brand-surface);
+  border: 1px solid var(--brand-border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.autocomplete-item {
+  padding: 10px 14px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  color: var(--brand-text-body);
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.active {
+  background: var(--brand-primary);
+  color: #fff;
+}
+
 .field-group input,
 .field-group select {
   font-family: "DM Sans", sans-serif;
