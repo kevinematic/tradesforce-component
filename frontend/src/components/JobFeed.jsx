@@ -11,6 +11,7 @@ const JobFeed = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const searchParams = useRef(null);
+  const resetFormRef = useRef(null);
 
   const loadRandomJobs = useCallback(async () => {
     setLoading(true);
@@ -73,14 +74,19 @@ const JobFeed = () => {
 
   const handleClear = useCallback(() => {
     searchParams.current = null;
+    if (resetFormRef.current) resetFormRef.current();
     loadRandomJobs();
   }, [loadRandomJobs]);
+
+  const handleClearRef = useCallback((resetFn) => {
+    resetFormRef.current = resetFn;
+  }, []);
 
   const isSearchMode = searchParams.current !== null;
 
   return (
     <div className="job-feed">
-      <JobSearchForm onSearch={handleSearch} loading={loading} />
+      <JobSearchForm onSearch={handleSearch} onClear={handleClearRef} loading={loading} />
 
       <div className="feed-controls">
         <button

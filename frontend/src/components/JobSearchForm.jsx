@@ -4,7 +4,7 @@ import "./JobSearchForm.css";
 
 const RADIUS_OPTIONS = [5, 10, 25, 50, 100];
 
-const JobSearchForm = ({ onSearch, loading }) => {
+const JobSearchForm = ({ onSearch, onClear, loading }) => {
   const [address, setAddress] = useState("");
   const [radius, setRadius] = useState(25);
   const [geocoding, setGeocoding] = useState(false);
@@ -84,6 +84,19 @@ const JobSearchForm = ({ onSearch, loading }) => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
   }, []);
+
+  const reset = useCallback(() => {
+    setAddress("");
+    setSelectedCoords(null);
+    setSuggestions([]);
+    setShowSuggestions(false);
+    setActiveIndex(-1);
+    setError(null);
+  }, []);
+
+  useEffect(() => {
+    if (onClear) onClear(reset);
+  }, [onClear, reset]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
