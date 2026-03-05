@@ -31,6 +31,11 @@
   position: relative;
 }
 
+.address-wrapper input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .autocomplete-list {
   position: absolute;
   top: 100%;
