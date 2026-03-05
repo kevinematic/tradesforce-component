@@ -4,7 +4,7 @@
  */
 export async function searchAddress(query) {
   const encoded = encodeURIComponent(query.trim());
-  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encoded}`;
+  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=us&q=${encoded}`;
 
   const response = await fetch(url, {
     headers: { "User-Agent": "TradesForce/1.0" },
@@ -26,7 +26,7 @@ export async function searchAddress(query) {
  */
 export async function geocodeAddress(address) {
   const encoded = encodeURIComponent(address.trim());
-  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encoded}`;
+  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&q=${encoded}`;
 
   const response = await fetch(url, {
     headers: { "User-Agent": "TradesForce/1.0" },
